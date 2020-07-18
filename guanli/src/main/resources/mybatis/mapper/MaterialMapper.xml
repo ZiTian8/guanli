@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhh.guanli.dao.MaterialMapper" >
+    <resultMap id="BaseResultMap" type="com.zhh.guanli.pojo.Material" >
+        <constructor ><!-- 构造器-->
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="supplier" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+            <arg column="stock" jdbcType="DECIMAL" javaType="java.lang.Integer" />
+
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, name,  supplier, price, stock,  create_time, update_time
+  </sql>
+    <update id="updateById" parameterType="com.zhh.guanli.pojo.Material">
+        update material
+        set name = #{name,jdbcType=VARCHAR},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      stock = #{stock,jdbcType=DECIMAL},
+      create_time = now(),
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectList" resultType="com.zhh.guanli.pojo.Material">
+        select
+        <include refid="Base_Column_List"></include>
+        from material
+        where stock > 0
+        order by name ,supplier,price,create_time
+    </select>
+
+    <select id="selectSame" resultType="java.lang.Integer">
+        select count(id)
+        from material
+        where name= #{name,jdbcType=VARCHAR} and supplier = #{supplier,jdbcType=VARCHAR} and supplier = #{price,jdbcType=DECIMAL}
+    </select>
+
+    <select id="getSameId" resultType="com.zhh.guanli.pojo.Material">
+        select
+        <include refid="Base_Column_List"></include>
+        from material
+        where name= #{name,jdbcType=VARCHAR} and supplier = #{supplier,jdbcType=VARCHAR} and supplier = #{price,jdbcType=DECIMAL}
+    </select>
+    <select id="selectById" resultType="com.zhh.guanli.pojo.Material">
+        select
+        <include refid="Base_Column_List"></include>
+        from aterial
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="addMaterial" parameterType="com.zhh.guanli.pojo.Material" >
+    insert into material (id, name,
+      supplier, price, stock,
+    create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER} , #{name,jdbcType=VARCHAR},
+      #{supplier,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{stock,jdbcType=DECIMAL},
+    now(), now()
+      )
+  </insert>
+
+<!--  <insert id="insert" parameterType="com.zhh.guanli.pojo.User" >-->
+<!--    insert into user (id, username, password,-->
+<!--      phone, question,-->
+<!--      answer, role, create_time,-->
+<!--      update_time)-->
+<!--    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},-->
+<!--      #{phone,jdbcType=VARCHAR}, #{question,jdbcType=VARCHAR},-->
+<!--      #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, now(),-->
+<!--      now())-->
+<!--  </insert>-->
+
+    <!--  <select id="checkEmailByUserId" resultType="int" parameterType="map">-->
+    <!--    select count(1)-->
+    <!--    from user-->
+    <!--    where email=#{email}-->
+    <!--    and id!=#{userId}-->
+    <!--  </select>-->
+
+
+</mapper>

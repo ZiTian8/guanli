@@ -5,7 +5,7 @@ import com.zhh.guanli.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
+@Repository
 @Mapper
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
@@ -20,11 +20,8 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    int
 
-    checkUsername(String username);
-
-    int checkEmail(String email);
+    int checkUsername(String username);
 
     User selectLogin(@Param("username") String username, @Param("password") String password);
 
@@ -36,5 +33,5 @@ public interface UserMapper {
 
     int checkPassword(@Param(value = "password") String password, @Param("userId") Integer id);
 
-    int checkEmailByUserId(@Param(value = "email") String email, @Param(value = "userId") Integer userId);
+//    int checkEmailByUserId(@Param(value = "email") String email, @Param(value = "userId") Integer userId);
 }

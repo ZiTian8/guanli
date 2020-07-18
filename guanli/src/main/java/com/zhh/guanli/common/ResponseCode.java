@@ -9,10 +9,10 @@ package com.zhh.guanli.common;
 
 public enum ResponseCode {
 
-    SUCCESS(0,"SUCCESS"),
-    ERROR(1,"ERROR"),
-    NEED_LOGIN(10,"NEED_LOGIN"),
-    ILLEGAL_ARGUMENT(2,"ILLEGAL_ARGUMENT");
+    SUCCESS(200,"SUCCESS"),
+    ERROR(400,"ERROR"),
+    NEED_LOGIN(401,"NEED_LOGIN"),
+    ILLEGAL_ARGUMENT(500,"ILLEGAL_ARGUMENT");
 
     private final int code;
     private final String desc;

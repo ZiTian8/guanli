@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhh.guanli.dao.CustomerMapper" >
+    <resultMap id="BaseResultMap" type="com.zhh.guanli.pojo.Customer" >
+        <constructor ><!-- 构造器-->
+            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+            <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, name,  phone, address, create_time, update_time
+  </sql>
+    <update id="updateById" parameterType="com.zhh.guanli.pojo.Customer">
+        update customer
+        set phone = #{phone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      update_time = now()
+    where id = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteCustomer" parameterType="java.lang.Integer">
+        delete from customer
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectList" resultType="com.zhh.guanli.pojo.Customer">
+        select
+        <include refid="Base_Column_List"></include>
+        from customer
+        order by name
+    </select>
+    <select id="selectById" resultType="com.zhh.guanli.pojo.Customer">
+        select
+        <include refid="Base_Column_List"></include>
+        from customer
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <insert id="addCustomer" parameterType="com.zhh.guanli.pojo.Customer" >
+    insert into customer (id, name,
+      phone, address,
+    create_time, update_time
+      )
+    values (#{id,jdbcType=INTEGER} , #{name,jdbcType=VARCHAR},
+      #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+    now(), now()
+      )
+  </insert>
+
+<!--  <insert id="insert" parameterType="com.zhh.guanli.pojo.User" >-->
+<!--    insert into user (id, username, password,-->
+<!--      phone, question,-->
+<!--      answer, role, create_time,-->
+<!--      update_time)-->
+<!--    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},-->
+<!--      #{phone,jdbcType=VARCHAR}, #{question,jdbcType=VARCHAR},-->
+<!--      #{answer,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}, now(),-->
+<!--      now())-->
+<!--  </insert>-->
+
+    <!--  <select id="checkEmailByUserId" resultType="int" parameterType="map">-->
+    <!--    select count(1)-->
+    <!--    from user-->
+    <!--    where email=#{email}-->
+    <!--    and id!=#{userId}-->
+    <!--  </select>-->
+
+
+</mapper>

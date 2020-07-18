@@ -20,6 +20,7 @@ import com.zhh.guanli.common.Const;
 import com.zhh.guanli.common.ServerResponse;
 import com.zhh.guanli.pojo.User;
 import com.zhh.guanli.service.IUserService;
+import com.zhh.guanli.util.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +28,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Map;
 
 //@Controller
 //@RequestMapping("/user/")
-@Controller
+//@Controller
+@CrossOrigin
+@RestController
 public class UserCotroller {
 
     @Autowired
@@ -46,8 +50,8 @@ public class UserCotroller {
      */
 
     @PostMapping(value = "/user/login")
-//    @ResponseBody
-    public String login(@RequestParam("username") String username,
+    @ResponseBody
+    public ServerResponse<User> login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
                         HttpSession session, HttpServletResponse httpServletResponse, Map<String,Object> map
                         ){
@@ -56,17 +60,28 @@ public class UserCotroller {
         if(response.isSuccess()){
 
             session.setAttribute(Const.CURRENT_USER,response.getData());
-            //CookieUtil.writeLoginToken(httpServletResponse,session.getId());
-            //RedisShardedPoolUtil.setEx(session.getId(), JsonUtil.obj2String(response.getData()), Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
-            return "redirect:/main.html";
+            CookieUtil.writeLoginToken(httpServletResponse,session.getId());
+            HashMap<String,String> rmap=new HashMap<>(1);
+
+            return response;
         }else{
 //            map.put("msg","用户名密码错误");
             map.put("msg",response.getMsg());
 
-            return  "login";
+            return  ServerResponse.createByErrorMessage("用户名密码错误");
         }
 //        return response.toString();
     }
+
+    @GetMapping(value = "/user/getInfo")
+    public ServerResponse<User> getUserInfo(HttpSession session){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if(user != null){
+            return ServerResponse.createBySuccess(user);
+        }
+        return ServerResponse.createByErrorMessage("用户未登录,无法获取当前用户的信息");
+    }
+
 
 //    @RequestMapping(value = "logout.do",method = RequestMethod.POST)
 //    @ResponseBody
